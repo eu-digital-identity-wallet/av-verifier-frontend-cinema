@@ -38,6 +38,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: |
+          npm config set legacy-peer-deps true
+          npm install
+
       - name: Run linting
         run: npm run lint
 
