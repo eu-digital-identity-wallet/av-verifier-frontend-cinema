@@ -1,6 +1,8 @@
-import { Separator } from 'radix-ui';
+import { Dialog, Separator } from 'radix-ui';
 import GalaxyQuestsPreview from '../assets/galaxy-quests-preview.png';
 import { Button } from '../components/ui/button';
+
+import { VerificationSheet } from '../components/verification-sheet';
 
 export function GalaxyQuests() {
   const today = new Date();
@@ -50,8 +52,20 @@ export function GalaxyQuests() {
         />
         <h3 className="font-[400]">NEXT SHOWTIMES FOR {formattedDate}</h3>
         <div className="mt-8 flex gap-4">
-          <Button text="19:00" className="cursor-pointer" />
-          <Button text="21:45" className="cursor-pointer" />
+          <Dialog.Root>
+            <Dialog.Trigger>
+              <Button text="19:00" className="cursor-pointer" />
+            </Dialog.Trigger>
+            <Dialog.Trigger>
+              <Button text="21:45" className="cursor-pointer" />
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+              <Dialog.Content className="fixed top-0 right-0 h-full w-[560px] transform bg-white shadow-lg transition-transform duration-300 ease-in-out">
+                <VerificationSheet />
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
       </div>
     </div>
