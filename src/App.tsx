@@ -1,6 +1,7 @@
 import { Route, Switch } from 'wouter';
 import { Header } from './components/header';
 import { Home } from './pages/Home';
+import { GalaxyQuests } from './pages/GalaxyQuest';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <div className="px-42">
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/galaxy-quests" component={GalaxyQuests} />
         </Switch>
       </div>
     </div>
