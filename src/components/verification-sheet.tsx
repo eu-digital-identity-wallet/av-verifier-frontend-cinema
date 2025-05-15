@@ -1,59 +1,43 @@
-import { Dialog, ScrollArea } from 'radix-ui';
-import EuWallet from '../assets/eu-wallet.svg';
-import { QRCodeSVG } from 'qrcode.react';
+import { ScrollArea } from 'radix-ui';
+import { useQuery } from '@tanstack/react-query';
+import {
+  CreatePresentationRequest,
+  GetPresentationState,
+} from '../lib/presentation';
+import { useState } from 'react';
+import { SheetHeader } from './verification-sheet/sheet-header';
+import { AgeVerification } from './verification-sheet/age-verification';
+import { VerificationSuccess } from './verification-sheet/verification-success';
 
 export function VerificationSheet() {
+  const [verified, setVerified] = useState(false);
+
+  const query = useQuery({
+    queryKey: ['proofRequest'],
+    queryFn: async () => CreatePresentationRequest(),
+    refetchOnWindowFocus: false,
+  });
+
+  const state = useQuery({
+    queryKey: ['proofState', query.data?.transaction_id],
+    queryFn: async () => GetPresentationState(query.data.transaction_id),
+    enabled: !!query.data?.transaction_id && !verified,
+    refetchInterval: 1500,
+  });
+
+  if (!verified && state.data === true) {
+    setVerified(true);
+  }
+
   return (
     <>
-      <div className="bg-sheet-header flex h-20 justify-evenly">
-        <div className="px-4 py-2">
-          <span className="text-xs text-gray-400">Step 1</span>
-          <p className="text-primary text-lg font-bold">Age Verification</p>
-        </div>
-        <div className="px-4 py-2">
-          <span className="text-xs text-gray-400">Step 2</span>
-          <p className="text-primary/50 text-lg font-bold">Buy Ticket</p>
-        </div>
-        <div className="px-4 py-2">
-          <span className="text-xs text-gray-400">Step 3</span>
-          <p className="text-primary/50 text-lg font-bold">Your Seat</p>
-        </div>
-      </div>
-      <div className="bg-sheet-header-step flex h-20 items-center justify-evenly">
-        <h3 className="text-primary text-lg font-bold">Age Verification</h3>
-        <img src={EuWallet} />
-      </div>
-      <Dialog.Close asChild>
-        <button
-          aria-label="Close"
-          className="absolute top-24 right-4 cursor-pointer p-4 font-bold text-gray-600">
-          ✕
-        </button>
-      </Dialog.Close>
+      <SheetHeader />
       <ScrollArea.Root className="h-[calc(100vh-160px)] w-full overflow-auto px-8 pb-8">
-        <h4 className="text-xl font-bold text-black">
-          This film requires a proof of age
-        </h4>
-        <p className="mt-2 text-black">
-          You must be at least 18 years old to purchase cinema tickets for this
-          film. Your age will also be checked before you enter the cinema on the
-          day of the screening.
-        </p>
-        <QRCodeSVG value="placeholder only" className="h-90 w-full py-8" />
-        <h4 className="text-xl font-bold text-black">How it works:</h4>
-        <p className="mt-4 text-black">
-          1. Open the Age Verification App on your Smartphone.
-        </p>
-        <p className="text-black">2. Use the app to scan the QR code above.</p>
-        <p className="text-black">
-          3. Follow the instructions in the app to complete the verification.
-        </p>
-        <p className="mt-12 text-black">
-          Once verified, this page will refresh automatically.
-          <br /> 🔒 Your data is secure and will not be shared without your
-          consent. Don't have the app yet? Download it on Googleplay or
-          Appstore.
-        </p>
+        {!verified ? (
+          <AgeVerification verified={verified} data={query.data} />
+        ) : (
+          <VerificationSuccess />
+        )}
       </ScrollArea.Root>
     </>
   );
