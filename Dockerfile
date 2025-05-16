@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN ls -ltr
+RUN cp .env.example .env
 RUN npm config set legacy-peer-deps true
 RUN npm i
 RUN npm run build && npm prune --production
