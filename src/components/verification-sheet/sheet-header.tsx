@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import EuWallet from '../../assets/eu-wallet.svg';
 
 export function SheetHeader({ buyTickets }: { buyTickets: boolean }) {
-  console.log('buyTickets', buyTickets);
   return (
     <>
       <div className="bg-sheet-header flex h-20 justify-evenly">
