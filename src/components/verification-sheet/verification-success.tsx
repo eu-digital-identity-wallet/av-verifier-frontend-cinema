@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 
 export function VerificationSuccess() {
   return (
-    <div>
+    <div className="mt-4">
       <h4 className="text-xl font-bold text-black">Thank You!</h4>
       <p className="mt-2 text-black">
         Your age has been successfully verified. <br /> You will be redirected
