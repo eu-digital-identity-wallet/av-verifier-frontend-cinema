@@ -53,10 +53,10 @@ export function GalaxyQuests() {
         <h3 className="font-[400]">NEXT SHOWTIMES FOR {formattedDate}</h3>
         <div className="mt-8 flex gap-4">
           <Dialog.Root>
-            <Dialog.Trigger>
+            <Dialog.Trigger asChild>
               <Button text="19:00" className="cursor-pointer" />
             </Dialog.Trigger>
-            <Dialog.Trigger>
+            <Dialog.Trigger asChild>
               <Button text="21:45" className="cursor-pointer" />
             </Dialog.Trigger>
             <Dialog.Portal>
