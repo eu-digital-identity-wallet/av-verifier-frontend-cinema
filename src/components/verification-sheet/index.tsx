@@ -31,12 +31,16 @@ export function VerificationSheet() {
     setVerified(true);
   }
 
+  if (!query.data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <SheetHeader buyTickets={buyTickets} />
       <ScrollArea.Root className="h-[calc(100vh-160px)] w-full overflow-auto px-8 pb-8">
-        {!verified ? (
-          <AgeVerification verified={verified} data={query.data} />
+        {!verified && query.data?.request ? (
+          <AgeVerification verified={verified} data={query?.data.request} />
         ) : !buyTickets ? (
           <VerificationSuccess setBuyTicket={setBuyTickets} />
         ) : (

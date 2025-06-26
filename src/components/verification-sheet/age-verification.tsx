@@ -5,12 +5,7 @@ export function AgeVerification({
   data,
 }: {
   verified: boolean;
-  data: {
-    transaction_id: string;
-    client_id: string;
-    request_uri: string;
-    request_uri_method: string;
-  };
+  data: string;
 }) {
   return (
     <>
@@ -22,13 +17,9 @@ export function AgeVerification({
         film. Your age will also be checked before you enter the cinema on the
         day of the screening.
       </p>
-      {!verified && data && data.transaction_id && (
+      {!verified && data && (
         <QRCodeSVG
-          value={`eudi-openid4vp://?client_id=${encodeURIComponent(
-            data.client_id
-          )}&request_uri=${encodeURIComponent(
-            data.request_uri
-          )}&request_uri_method=${encodeURIComponent(data.request_uri_method)}`}
+          value={parseJwtAndCreateUri(data)}
           className="h-90 w-full py-8"
         />
       )}
@@ -47,4 +38,52 @@ export function AgeVerification({
       </p>
     </>
   );
+}
+
+function parseJwtAndCreateUri(token: string): string {
+  console.log('token:', token);
+  if (!token) {
+    throw new Error('Token is undefined or empty');
+  }
+  const parts = token.split('.');
+  if (parts.length !== 3) {
+    throw new Error('Token does not have the expected 3 parts');
+  }
+  const base64Url = parts[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
+  const parsed = JSON.parse(jsonPayload);
+
+  console.log(parsed);
+
+  const request_new =
+    'av' +
+    '://' +
+    '?client_id=redirect_uri:' +
+    parsed.response_uri +
+    '&response_type=' +
+    parsed.response_type +
+    '&response_mode=' +
+    parsed.response_mode +
+    '&response_uri=' +
+    parsed.response_uri +
+    '&presentation_definition_uri=' +
+    parsed.presentation_definition_uri +
+    '&dcql=null' +
+    //parsed.dcql_query +
+    '&nonce=' +
+    parsed.nonce +
+    '&state=' +
+    parsed.state;
+
+  console.log(request_new);
+
+  return request_new;
 }
