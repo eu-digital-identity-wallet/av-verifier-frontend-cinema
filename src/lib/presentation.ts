@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { PresentationState } from './types';
 
 const verifierUrl = import.meta.env.VITE_VERIFIER_BASE_URL;
 
@@ -32,7 +33,9 @@ export async function CreatePresentationRequest() {
   return data;
 }
 
-export async function GetPresentationState(transactionID: string) {
+export async function GetPresentationState(
+  transactionID: string
+): Promise<PresentationState> {
   const response = await fetch(
     verifierUrl + `/ui/presentations/${transactionID}`,
     {
@@ -46,10 +49,6 @@ export async function GetPresentationState(transactionID: string) {
     throw new Error('Network response was not ok');
   }
 
-  if (response.status === 200) {
-    console.log('response:', await response.json());
-    return true;
-  } else {
-    return false;
-  }
+  const data = await response.json();
+  return data;
 }
