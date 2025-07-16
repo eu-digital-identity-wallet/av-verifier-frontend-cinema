@@ -28,22 +28,19 @@ The Verifier Service consists of two components: the frontend (UI) and the actua
 
 ## Disclaimer
 
-This is an initial version of the software, developed solely for the purpose of demonstrating the business flow of the solution. It is not intended for production use and does not yet include the full set of functional, security, or integration features required for a live deployment.
+This is the first release of the software, developed solely for the purpose of demonstrating the business flow of the solution. It is not intended for production use and does not yet include the full set of functional, security or integration features required for a live deployment.
 
-The current release provides only basic functionality, with several key features to be introduced in future versions, including:
-
-- App and device verification based on Google Play Integrity API and Apple App Attestation
-- Additional issuance methods beyond the currently implemented eID-based method
+The current release provides only basic functionality, with several key features to be introduced in future versions.
 
 These planned features align with the requirements and methods described in the Age Verification Profile.
 
-This version should be considered a foundational prototype to support early testing, feedback, and integration discussions.
+This version should be considered a foundational prototype to support early testing, feedback and integration discussions.
 
 **Important limitations:**
-- The initial development release may be changed substantially over time and might introduce new features, change, or remove existing ones, potentially breaking compatibility with your existing code.
-- The initial development release may contain errors, design flaws, or other problems that could cause system or other failures and data loss.
-- The initial development release has reduced security, privacy, availability, and reliability standards relative to future releases. This could make the software slower, less reliable, or more vulnerable to attacks than mature software.
-- The initial development release is not yet comprehensively documented.
+- The release may be changed substantially over time and might introduce new features, change, or remove existing ones, potentially breaking compatibility with your existing code.
+- The release may contain errors, design flaws, or other problems that could cause system or other failures and data loss.
+- The release has reduced security, privacy, availability, and reliability standards relative to future releases. This could make the software slower, less reliable, or more vulnerable to attacks than mature software.
+- The release is not yet comprehensively documented.
 - Users of the software must perform sufficient engineering and additional testing to properly evaluate their application and determine whether any of the open-sourced components are suitable for use in that application.
 - We strongly recommend not putting this version of the software into production use.
 - Only the latest version of the software will be supported.
@@ -61,12 +58,12 @@ Before you begin, ensure you have the following installed on your system:
 - [Docker](https://www.docker.com/) (if you want to run the application in a container)
 - [EUDI Verifier Backend Service](https://github.com/eu-digital-identity-wallet/eudi-srv-web-verifier-endpoint-23220-4-kt)
 
-A comprehensive guide for installing and configuring the EUDI verifier backend can be found in the av-verifier-ui repository. For detailed instructions, please refer to the documentation available at: https://github.com/T-Scy/av-verifier-ui.
+A comprehensive guide for installing and configuring the EUDI verifier backend can be found in the [av-verifier-ui](https://github.com/eu-digital-identity-wallet/av-web-verifier-ui) repository. For detailed instructions, please refer to the documentation available at: https://ageverification.dev/.
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/t-scy/av-verifier-frontend-starfilm.git
+git clone https://github.com/eu-digital-identity-wallet/av-verifier-frontend-starfilm.git
 cd av-verifier-frontend-starfilm
 ```
 
@@ -86,7 +83,7 @@ The Application will run on http://localhost:5173/.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/t-scy/av-verifier-frontend-starfilm.git
+git clone https://github.com/eu-digital-identity-wallet/av-verifier-frontend-starfilm.git
 cd av-verifier-frontend-starfilm
 ```
 
