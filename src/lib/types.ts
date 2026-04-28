@@ -15,6 +15,11 @@ export interface KeyValue<K, V> {
   value: V;
 }
 
+export type VerifiedAttribute = {
+  key: string;
+  value: string | number | boolean;
+};
+
 export type Single = {
   kind: 'single';
   format: AttestationFormat;
@@ -32,31 +37,6 @@ export type Errored = {
   kind: 'error';
   format: AttestationFormat;
   reason: string;
-};
-
-export type Fields = {
-  age_over_18: boolean;
-  age_over_13: boolean;
-  age_over_15: boolean;
-  age_over_16: boolean;
-  age_over_21: boolean;
-  age_over_23: boolean;
-  age_over_25: boolean;
-  age_over_27: boolean;
-  age_over_28: boolean;
-  age_over_40: boolean;
-  age_over_60: boolean;
-  age_over_65: boolean;
-  age_over_67: boolean;
-  /* issue_date: boolean;
-  expiry_date: boolean;
-  issuing_authority: boolean;
-  issuing_jurisdiction: boolean;
-  issuing_country: boolean;*/
-};
-
-export type PresentationFields = {
-  path: string[];
 };
 
 export type TrustInfo = {
@@ -83,4 +63,50 @@ export type PresentationState = {
     }>;
   };
   trust_info: TrustInfo[];
+};
+
+export type DcApiResponse = {
+  sessionId: string;
+  dcRequestProtocol: string;
+  dcRequestString: string;
+  dcRequestProtocol2: string | null;
+  dcRequestString2: string | null;
+};
+
+export interface IdentityRequestProvider {
+  protocol: string;
+  data: object;
+}
+
+export interface DcApiDeviceResponse {
+  pages: Page[];
+}
+
+export interface Page {
+  lines: Line[];
+}
+
+export interface Line {
+  key: string;
+  value: string;
+}
+
+export type MdocElement = {
+  elementIdentifier: string;
+  elementValue: unknown;
+};
+
+export type IssuerSignedItem = {
+  value: Uint8Array;
+};
+
+export type MdocDocument = {
+  docType: string;
+  issuerSigned: {
+    nameSpaces: Record<string, IssuerSignedItem[]>;
+  };
+};
+
+export type MdocDeviceResponse = {
+  documents: MdocDocument[];
 };

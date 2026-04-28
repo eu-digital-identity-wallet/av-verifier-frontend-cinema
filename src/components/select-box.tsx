@@ -20,7 +20,7 @@ export function SelectBox({
           borderColor
         )}>
         <p className="text-black">{amount}</p>
-        <img src={ChevronDown} />
+        <img src={ChevronDown} alt="" aria-hidden="true" />
       </div>
       <p className="my-2 text-center text-sm text-gray-500">{price} €</p>
     </div>

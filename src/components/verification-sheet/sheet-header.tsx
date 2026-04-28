@@ -1,6 +1,6 @@
 import { Dialog } from 'radix-ui';
 import clsx from 'clsx';
-import EuWallet from '../../assets/eu-wallet.svg';
+import EuWallet from '../../assets/Age verification wallet icon.png';
 
 export function SheetHeader({ buyTickets }: { buyTickets: boolean }) {
   return (
@@ -43,7 +43,9 @@ export function SheetHeader({ buyTickets }: { buyTickets: boolean }) {
         <h3 className="text-primary text-lg font-bold">
           {buyTickets ? 'Buy Ticket' : 'Age Verification'}
         </h3>
-        {!buyTickets && <img src={EuWallet} />}
+        {!buyTickets && (
+          <img src={EuWallet} width={52} height={43} alt="EU Digital Wallet" />
+        )}
       </div>
       <Dialog.Close asChild>
         <button

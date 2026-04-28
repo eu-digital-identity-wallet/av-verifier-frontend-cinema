@@ -1,10 +1,8 @@
 import { Separator } from 'radix-ui';
 import { SelectBox } from '../select-box';
 import { Button } from '../ui/button';
-import { useLocation } from 'wouter';
 
-export function BuyTickets() {
-  const [, setLocation] = useLocation();
+export function BuyTickets({ onNext }: { onNext: () => void }) {
   return (
     <div className="mt-4">
       <h4 className="text-xl font-bold text-black">
@@ -64,9 +62,9 @@ export function BuyTickets() {
           <p className="text-black">9,99 €</p>
         </div>
         <Button
-          onClick={() => setLocation('/')}
+          onClick={onNext}
           text="Next"
-          className="absolute bottom-12 w-[90%] text-black"
+          className="mt-8 w-full text-black"
         />
       </div>
     </div>

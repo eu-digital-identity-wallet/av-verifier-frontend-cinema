@@ -14,11 +14,15 @@ export function VerificationSuccess({
         shortly... <br />
         <br /> If you are not redirected within a few seconds, click next
       </p>
-      <img src={Checkmark} className="mx-auto mt-8 flex" />
+      <img
+        src={Checkmark}
+        className="mx-auto mt-8 flex"
+        alt="Verification successful"
+      />
       <Button
         onClick={() => setBuyTicket(true)}
         text="Next"
-        className="absolute bottom-12 w-[90%] text-black"
+        className="mt-8 w-full text-black"
       />
     </div>
   );
