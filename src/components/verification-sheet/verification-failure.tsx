@@ -1,10 +1,10 @@
-export function VerificationFailure() {
+export function VerificationFailure({ minAge }: { minAge: string }) {
   return (
     <div className="mt-4">
       <h4 className="text-xl font-bold text-black">Verification Failed</h4>
       <p className="mt-2 text-black">
-        Unfortunately, we could not verify that you are over 18 years old with
-        sufficient trust level. <br />
+        Unfortunately, we could not verify that you are over {minAge} years old
+        with sufficient trust level. <br />
         <br />
         Please ensure you have a valid digital identity credential and try
         again.

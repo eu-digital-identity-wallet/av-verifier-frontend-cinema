@@ -1,36 +1,85 @@
 import { QRCodeSVG } from 'qrcode.react';
+import { useState } from 'react';
+import { parseJwtAndCreateWalletUri } from '../../lib/wallet-uri';
+
+interface AgeVerificationProps {
+  verified: boolean;
+  data?: string;
+  dcApiSupported: boolean;
+  onDcApiClick: () => void;
+  minAge: string;
+  dcApiReady: boolean;
+}
 
 export function AgeVerification({
   verified,
   data,
-}: {
-  verified: boolean;
-  data: string;
-}) {
+  dcApiSupported,
+  onDcApiClick,
+  minAge,
+  dcApiReady,
+}: AgeVerificationProps) {
+  const [dcApiClicked, setDcApiClicked] = useState(false);
+
   return (
     <>
       <h4 className="text-xl font-bold text-black">
         This film requires a proof of age
       </h4>
       <p className="mt-2 text-black">
-        You must be at least 18 years old to purchase cinema tickets for this
-        film. Your age will also be checked before you enter the cinema on the
-        day of the screening.
+        You must be at least {minAge} years old to purchase cinema tickets for
+        this film. Your age will also be checked before you enter the cinema on
+        the day of the screening.
       </p>
-      {!verified && data && (
-        <QRCodeSVG
-          value={parseJwtAndCreateUri(data)}
-          className="h-90 w-full py-8"
-        />
+
+      {!verified && (
+        <>
+          {dcApiSupported ? (
+            <div className="my-8">
+              {!dcApiClicked ? (
+                <button
+                  disabled={!dcApiReady}
+                  onClick={() => {
+                    setDcApiClicked(true);
+                    onDcApiClick();
+                  }}
+                  className="w-full rounded-lg bg-[#FAA71F] px-6 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#e0951a] disabled:cursor-not-allowed disabled:opacity-50">
+                  {dcApiReady ? 'Verify your age' : 'Preparing...'}
+                </button>
+              ) : (
+                <p className="text-center text-gray-600">
+                  Please follow the prompts on your device...
+                </p>
+              )}
+            </div>
+          ) : data ? (
+            <QRCodeSVG
+              value={parseJwtAndCreateWalletUri(data)}
+              className="h-90 w-full py-8"
+              aria-label="Scan with your wallet app"
+            />
+          ) : null}
+        </>
       )}
+
       <h4 className="text-xl font-bold text-black">How it works:</h4>
-      <p className="mt-4 text-black">
-        1. Open the Age Verification App on your Smartphone.
-      </p>
-      <p className="text-black">2. Use the app to scan the QR code above.</p>
-      <p className="text-black">
-        3. Follow the instructions in the app to complete the verification.
-      </p>
+      {dcApiSupported ? (
+        <>
+          <p className="mt-4 text-black">1. Click the button above.</p>
+          <p className="text-black">
+            2. Choose your Age Verification credential.
+          </p>
+          <p className="text-black">3. Approve sharing your age information.</p>
+        </>
+      ) : (
+        <>
+          <p className="mt-4 text-black">
+            1. Open the Age Verification App on your smartphone.
+          </p>
+          <p className="text-black">2. Scan the QR code above.</p>
+          <p className="text-black">3. Follow the instructions in the app.</p>
+        </>
+      )}
       <p className="mt-12 text-black">
         Once verified, this page will refresh automatically.
         <br /> 🔒 Your data is secure and will not be shared without your
@@ -38,50 +87,4 @@ export function AgeVerification({
       </p>
     </>
   );
-}
-
-function parseJwtAndCreateUri(token: string): string {
-  console.log('token:', token);
-  if (!token) {
-    throw new Error('Token is undefined or empty');
-  }
-  const parts = token.split('.');
-  if (parts.length !== 3) {
-    throw new Error('Token does not have the expected 3 parts');
-  }
-  const base64Url = parts[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
-  const parsed = JSON.parse(jsonPayload);
-
-  console.log(parsed);
-
-  const request_new =
-    'av' +
-    '://?' +
-    'response_type=' +
-    parsed.response_type +
-    '&response_mode=' +
-    parsed.response_mode +
-    '&client_id=redirect_uri' +
-    encodeURIComponent(':' + parsed.response_uri) +
-    '&response_uri=' +
-    encodeURIComponent(parsed.response_uri) +
-    '&dcql_query=' +
-    encodeURIComponent(JSON.stringify(parsed.dcql_query)) +
-    '&nonce=' +
-    parsed.nonce +
-    '&state=' +
-    parsed.state;
-
-  console.log(request_new);
-
-  return request_new;
 }
