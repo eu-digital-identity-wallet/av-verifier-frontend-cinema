@@ -32,7 +32,7 @@ export function useAgeVerification(ageRequirement: string = DEFAULT_AGE_CLAIM) {
   const [verifiedData, setVerifiedData] = useState<VerifiedAttribute[] | null>(
     null
   );
-  const [trustInfo, setTrustInfo] = useState<TrustInfo[] | null>(null);
+  const [trustInfo, setTrustInfo] = useState<TrustInfo | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(
     null
   );
@@ -69,12 +69,23 @@ export function useAgeVerification(ageRequirement: string = DEFAULT_AGE_CLAIM) {
           ? !String(issuerLine.value).includes('Not in trust list')
           : false;
 
-        setTrustInfo([
-          {
-            issuer_in_trusted_list: isTrusted,
-            is_fully_trusted: isTrusted,
-          },
-        ] as TrustInfo[]);
+        // The DC API path has no per-check report from the backend; it only exposes a single
+        // trusted/untrusted signal, mapped onto the overall verdict.
+        setTrustInfo({
+          trusted: isTrusted,
+          documents: [
+            {
+              index: 0,
+              document_type: AV_NAMESPACE,
+              valid: isTrusted,
+              checks: {
+                IssuerChainTrusted: {
+                  status: isTrusted ? 'passed' : 'failed',
+                },
+              },
+            },
+          ],
+        });
         setVerificationCompleted(true);
         return;
       }
@@ -156,7 +167,7 @@ export function useAgeVerification(ageRequirement: string = DEFAULT_AGE_CLAIM) {
     });
 
   const isAgeVerifiedAndFullyTrusted =
-    isAgeVerified && trustInfo?.[0]?.is_fully_trusted;
+    isAgeVerified && (trustInfo?.trusted ?? false);
 
   return {
     dcApiSupported,
