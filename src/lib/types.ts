@@ -39,14 +39,27 @@ export type Errored = {
   reason: string;
 };
 
+// Verdict of a single validation check, as emitted by the verifier.
+export type CheckStatus = 'passed' | 'skipped' | 'failed';
+
+export type CheckOutcome = {
+  status: CheckStatus;
+  detail?: string;
+};
+
+export type DocumentTrustInfo = {
+  index: number;
+  document_type: string;
+  valid: boolean;
+  checks: Record<string, CheckOutcome>;
+};
+
+// The per-check trust report returned under `trust_info` by the verifier's get-wallet-response
+// endpoint (present only when always-accept mode is enabled). This UI only uses the overall
+// `trusted` verdict to show a checkmark or a red cross.
 export type TrustInfo = {
-  issuer_in_trusted_list: boolean;
-  issuer_not_expired: boolean;
-  trusted_list_source: string;
-  valid_from: string;
-  valid_until: string;
-  validation_errors: string[];
-  is_fully_trusted: boolean;
+  trusted: boolean;
+  documents: DocumentTrustInfo[];
 };
 
 export type PresentationState = {
@@ -62,7 +75,8 @@ export type PresentationState = {
       path: string;
     }>;
   };
-  trust_info: TrustInfo[];
+  // Present only when the verifier runs in always-accept mode.
+  trust_info?: TrustInfo;
 };
 
 export type DcApiResponse = {
